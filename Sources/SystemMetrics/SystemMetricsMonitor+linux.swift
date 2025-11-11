@@ -139,7 +139,7 @@ extension SystemMetricsMonitor {
     private static let cpuUsageCalculator = CPUUsageCalculator()
     
     @Sendable
-    internal static func linuxSystemMetrics() -> SystemMetrics.Data? {
+    internal static func linuxSystemMetrics() -> SystemMetricsMonitor.Data? {
         /// The current implementation below reads /proc/self/stat. Then,
         /// presumably to accommodate whitespace in the `comm` field
         /// without dealing with null-terminated C strings, it splits on the
@@ -256,7 +256,7 @@ extension SystemMetricsMonitor {
         let cpuTicks = utimeTicks + stimeTicks
         let cpuSeconds = cpuTicks / SystemConfiguration.clockTicksPerSecond
         
-        guard let systemStartTimeInSecondsSinceEpoch = SystemMetrics.systemStartTimeInSecondsSinceEpoch else {
+        guard let systemStartTimeInSecondsSinceEpoch = SystemMetricsMonitor.systemStartTimeInSecondsSinceEpoch else {
             return nil
         }
         let startTimeInSecondsSinceEpoch = systemStartTimeInSecondsSinceEpoch + processStartTimeInSeconds
@@ -268,7 +268,7 @@ extension SystemMetricsMonitor {
                   uptimeSeconds.isFinite
             else { return nil }
             let uptimeTicks = Int(ceilf(uptimeSeconds)) * SystemConfiguration.clockTicksPerSecond
-            cpuUsage = SystemMetrics.cpuUsageCalculator.getUsagePercentage(
+            cpuUsage = SystemMetricsMonitor.cpuUsageCalculator.getUsagePercentage(
                 ticksSinceSystemBoot: uptimeTicks,
                 cpuTicks: cpuTicks
             )
@@ -304,7 +304,12 @@ extension SystemMetricsMonitor {
         )
     }
     
-    func collectMetricsData() -> SystemMetricsV2.Data? {
+    /// Collect current system metrics data.
+    ///
+    /// On Linux, this delegates to the static `linuxSystemMetrics()` function.
+    ///
+    /// - Returns: Current system metrics, or `nil` if collection failed.
+    func collectMetricsData() -> SystemMetricsMonitor.Data? {
         Self.linuxSystemMetrics()
     }
 }

@@ -27,7 +27,7 @@ struct SystemMetricsTests {
     @Test("Linux system metrics generation provides all required metrics")
     func systemMetricsGeneration() async throws {
         #if os(Linux)
-        let _metrics = SystemMetrics.linuxSystemMetrics()
+        let _metrics = SystemMetricsMonitor.linuxSystemMetrics()
         #expect(_metrics != nil)
         let metrics = _metrics!
         #expect(metrics.virtualMemoryBytes != 0)
@@ -42,7 +42,7 @@ struct SystemMetricsTests {
 
     @Test("Custom labels with prefix are correctly formatted")
     func systemMetricsLabels() throws {
-        let labels = SystemMetrics.Labels(
+        let labels = SystemMetricsMonitor.Labels(
             prefix: "pfx+",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
@@ -64,7 +64,7 @@ struct SystemMetricsTests {
 
     @Test("Configuration preserves all provided settings")
     func systemMetricsConfiguration() throws {
-        let labels = SystemMetrics.Labels(
+        let labels = SystemMetricsMonitor.Labels(
             prefix: "pfx_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
@@ -75,7 +75,7 @@ struct SystemMetricsTests {
             cpuUsage: "cpu"
         )
         let dimensions = [("app", "example"), ("environment", "production")]
-        let configuration = SystemMetrics.Configuration(
+        let configuration = SystemMetricsMonitor.Configuration(
             pollInterval: .microseconds(123_456_789),
             labels: labels,
             dimensions: dimensions
@@ -101,7 +101,7 @@ struct SystemMetricsTests {
     @Test("CPU usage calculator accurately computes percentage")
     func cpuUsageCalculator() throws {
         #if os(Linux)
-        let calculator = SystemMetrics.CPUUsageCalculator()
+        let calculator = SystemMetricsMonitor.CPUUsageCalculator()
         var usage = calculator.getUsagePercentage(ticksSinceSystemBoot: 0, cpuTicks: 0)
         #expect(!usage.isNaN)
         #expect(usage == 0)
@@ -128,7 +128,7 @@ struct SystemMetricsTests {
             bytes.initializeMemory(as: UInt8.self, repeating: .zero)
         }
 
-        guard let startResidentMemoryBytes = SystemMetrics.linuxSystemMetrics()?.residentMemoryBytes else {
+        guard let startResidentMemoryBytes = SystemMetricsMonitor.linuxSystemMetrics()?.residentMemoryBytes else {
             Issue.record("Could not get resident memory usage.")
             return
         }
@@ -137,7 +137,7 @@ struct SystemMetricsTests {
         defer { bytes.deallocate() }
         bytes.initializeMemory(as: UInt8.self, repeating: .zero)
 
-        guard let residentMemoryBytes = SystemMetrics.linuxSystemMetrics()?.residentMemoryBytes else {
+        guard let residentMemoryBytes = SystemMetricsMonitor.linuxSystemMetrics()?.residentMemoryBytes else {
             Issue.record("Could not get resident memory usage.")
             return
         }
@@ -176,7 +176,7 @@ struct SystemMetricsTests {
             bytes.hash(into: &hasher)
         }
 
-        let metrics = SystemMetrics.linuxSystemMetrics()
+        let metrics = SystemMetricsMonitor.linuxSystemMetrics()
         #expect(metrics != nil)
 
         // We can only set expectations for the lower limit for the CPU usage time,
