@@ -192,7 +192,7 @@ public struct SystemMetricsMonitor: Sendable {
 /// This provider collects process-level metrics from the operating system.
 /// It is used as the default data provider when no custom provider is specified.
 @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
-package struct SystemMetricsMonitorDataProvider {
+package struct SystemMetricsMonitorDataProvider: Sendable {
     let configuration: SystemMetricsMonitor.Configuration
 
     package init(configuration: SystemMetricsMonitor.Configuration) {
