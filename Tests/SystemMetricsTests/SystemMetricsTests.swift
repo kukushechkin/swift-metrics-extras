@@ -12,13 +12,12 @@
 //
 //===----------------------------------------------------------------------===//
 
+import CoreMetrics
 import Dispatch
 import Foundation
-import Testing
-
-import SystemMetrics
-import CoreMetrics
 import MetricsTestKit
+import SystemMetrics
+import Testing
 
 /// A mock metrics provider for testing
 @available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *)
@@ -140,22 +139,22 @@ struct SystemMetricsTests {
         // Verify each metric was recorded with correct values
         let vmbGauge = try testMetrics.expectGauge("test_vmb")
         #expect(vmbGauge.lastValue == 1000)
-        
+
         let rmbGauge = try testMetrics.expectGauge("test_rmb")
         #expect(rmbGauge.lastValue == 2000)
-        
+
         let stsGauge = try testMetrics.expectGauge("test_sts")
         #expect(stsGauge.lastValue == 3000)
-        
+
         let cptGauge = try testMetrics.expectGauge("test_cpt")
         #expect(cptGauge.lastValue == 4000)
-        
+
         let mfdGauge = try testMetrics.expectGauge("test_mfd")
         #expect(mfdGauge.lastValue == 5000)
-        
+
         let ofdGauge = try testMetrics.expectGauge("test_ofd")
         #expect(ofdGauge.lastValue == 6000)
-        
+
         let cpuGauge = try testMetrics.expectGauge("test_cpu")
         #expect(cpuGauge.lastValue == 7.5)
     }
@@ -349,7 +348,7 @@ struct SystemMetricsInitializationTests {
     }()
 
     let testMetrics: TestMetrics = Self.sharedSetup
-    
+
     @Test("Monitor uses global MetricsSystem when no factory provided")
     func monitorUsesGlobalMetricsSystem() async throws {
         // Create mock data
@@ -436,10 +435,11 @@ struct SystemMetricsInitializationTests {
         #expect(vmbGauge.lastValue! > 0)
         #else
         // On macOS, the provider returns nil, so no metrics should be recorded
-        #expect(!testMetrics.recorders.contains(where: { recorder in
-            recorder.label == "default_vmb"
-        }))
+        #expect(
+            !testMetrics.recorders.contains(where: { recorder in
+                recorder.label == "default_vmb"
+            })
+        )
         #endif
     }
 }
-
