@@ -32,15 +32,15 @@ struct MockMetricsProvider: SystemMetricsProvider {
 struct SystemMetricsTests {
     @Test("Custom labels with prefix are correctly formatted")
     func systemMetricsLabels() throws {
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "pfx+",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         #expect(labels.label(for: \.virtualMemoryBytes) == "pfx+vmb")
@@ -54,15 +54,15 @@ struct SystemMetricsTests {
 
     @Test("Configuration preserves all provided settings")
     func systemMetricsConfiguration() throws {
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "pfx_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
         let dimensions = [("app", "example"), ("environment", "production")]
         let configuration = SystemMetricsMonitor.Configuration(
@@ -103,15 +103,15 @@ struct SystemMetricsTests {
         let provider = MockMetricsProvider(mockData: mockData)
         let testMetrics = TestMetrics()
 
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "test_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let configuration = SystemMetricsMonitor.Configuration(
@@ -154,15 +154,15 @@ struct SystemMetricsTests {
         let provider = MockMetricsProvider(mockData: nil)
         let testMetrics = TestMetrics()
 
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "test_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let configuration = SystemMetricsMonitor.Configuration(
@@ -196,15 +196,15 @@ struct SystemMetricsTests {
         let provider = MockMetricsProvider(mockData: mockData)
         let testMetrics = TestMetrics()
 
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "test_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let dimensions = [("service", "myapp"), ("environment", "production")]
@@ -259,15 +259,15 @@ struct SystemMetricsTests {
         let provider = CallCountingProvider(mockData: mockData)
         let testMetrics = TestMetrics()
 
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "test_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let configuration = SystemMetricsMonitor.Configuration(
@@ -302,15 +302,15 @@ struct SystemMetricsTests {
     func monitorWithDefaultProvider() async throws {
         let testMetrics = TestMetrics()
 
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "test_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let configuration = SystemMetricsMonitor.Configuration(
@@ -362,15 +362,15 @@ struct SystemMetricsInitializationTests {
 
         let provider = MockMetricsProvider(mockData: mockData)
 
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "global_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let configuration = SystemMetricsMonitor.Configuration(
@@ -395,15 +395,15 @@ struct SystemMetricsInitializationTests {
 
     @Test("Monitor with default provider uses platform implementation")
     func monitorWithDefaultProvider() async throws {
-        let labels = SystemMetricsMonitor.Labels(
+        let labels = SystemMetricsMonitor.Configuration.Labels(
             prefix: "default_",
             virtualMemoryBytes: "vmb",
             residentMemoryBytes: "rmb",
             startTimeSeconds: "sts",
             cpuSecondsTotal: "cpt",
             cpuUsage: "cpu",
-            maxFds: "mfd",
-            openFds: "ofd"
+            maxFileDescriptors: "mfd",
+            openFileDescriptors: "ofd"
         )
 
         let configuration = SystemMetricsMonitor.Configuration(
