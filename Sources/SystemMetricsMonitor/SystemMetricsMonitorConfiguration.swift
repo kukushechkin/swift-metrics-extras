@@ -64,7 +64,7 @@ extension SystemMetricsMonitor.Configuration {
         package func label(for keyPath: KeyPath<Labels, String>) -> String {
             self.prefix + self[keyPath: keyPath]
         }
-        
+
         /// Create a new `Labels` instance.
         ///
         /// - Parameters:
@@ -77,14 +77,14 @@ extension SystemMetricsMonitor.Configuration {
         ///     - maxFileDescriptors: Lable for maximum number of open file descriptors.
         ///     - openFileDescriptors: Lable for number of open file descriptors.
         public init(
-           prefix: String,
-           virtualMemoryBytes: String,
-           residentMemoryBytes: String,
-           startTimeSeconds: String,
-           cpuSecondsTotal: String,
-           cpuUsage: String,
-           maxFileDescriptors: String,
-           openFileDescriptors: String
+            prefix: String,
+            virtualMemoryBytes: String,
+            residentMemoryBytes: String,
+            startTimeSeconds: String,
+            cpuSecondsTotal: String,
+            cpuUsage: String,
+            maxFileDescriptors: String,
+            openFileDescriptors: String
         ) {
             self.prefix = prefix
             self.virtualMemoryBytes = virtualMemoryBytes
