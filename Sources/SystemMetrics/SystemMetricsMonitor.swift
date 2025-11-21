@@ -13,8 +13,8 @@
 //===----------------------------------------------------------------------===//
 import CoreMetrics
 import Foundation
-import ServiceLifecycle
 import Logging
+import ServiceLifecycle
 
 /// A monitor that periodically collects and reports system metrics.
 ///
@@ -42,7 +42,7 @@ public struct SystemMetricsMonitor: Service {
 
     /// Internal logger
     let logger: Logger
-    
+
     /// Create a new `SystemMetricsMonitor` using the global metrics factory.
     ///
     /// - Parameters:
@@ -67,7 +67,11 @@ public struct SystemMetricsMonitor: Service {
     /// - Parameters:
     ///   - configuration: The configuration for the monitor.
     ///   - dataProvider: The provider to use for collecting system metrics data.
-    package init(configuration: SystemMetricsMonitor.Configuration, dataProvider: SystemMetricsProvider, logger: Logger? = nil) {
+    package init(
+        configuration: SystemMetricsMonitor.Configuration,
+        dataProvider: SystemMetricsProvider,
+        logger: Logger? = nil
+    ) {
         self.init(
             configuration: configuration,
             metricsFactory: nil,
@@ -81,7 +85,11 @@ public struct SystemMetricsMonitor: Service {
     /// - Parameters:
     ///   - configuration: The configuration for the monitor.
     ///   - metricsFactory: The metrics factory to use for creating metrics.
-    public init(configuration: SystemMetricsMonitor.Configuration, metricsFactory: MetricsFactory, logger: Logger? = nil) {
+    public init(
+        configuration: SystemMetricsMonitor.Configuration,
+        metricsFactory: MetricsFactory,
+        logger: Logger? = nil
+    ) {
         self.init(
             configuration: configuration,
             metricsFactory: metricsFactory,
@@ -102,7 +110,7 @@ public struct SystemMetricsMonitor: Service {
             logger: logger
         )
     }
-    
+
     /// Collect and report system metrics once.
     ///
     /// This method collects current system metrics and reports them as gauges
@@ -114,10 +122,13 @@ public struct SystemMetricsMonitor: Service {
             self.logger.warning("Failed to fetch the latest system metrics")
             return
         }
-        self.logger.info("Fetched the latest system metrics", metadata: [
-            self.configuration.labels.cpuSecondsTotal.description: Logger.MetadataValue("\(metrics.cpuUsage)"),
-            self.configuration.labels.cpuUsage.description: Logger.MetadataValue("\(metrics.cpuUsage)")
-        ])
+        self.logger.info(
+            "Fetched the latest system metrics",
+            metadata: [
+                self.configuration.labels.cpuSecondsTotal.description: Logger.MetadataValue("\(metrics.cpuUsage)"),
+                self.configuration.labels.cpuUsage.description: Logger.MetadataValue("\(metrics.cpuUsage)"),
+            ]
+        )
         let effectiveMetricsFactory = self.metricsFactory ?? MetricsSystem.factory
         Gauge(
             label: self.configuration.labels.label(for: \.virtualMemoryBytes),
