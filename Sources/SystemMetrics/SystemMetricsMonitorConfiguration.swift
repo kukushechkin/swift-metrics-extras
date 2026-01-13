@@ -13,14 +13,16 @@
 //===----------------------------------------------------------------------===//
 
 extension SystemMetricsMonitor {
-    /// This object controls the behaviour of the ``SystemMetricsMonitor``.
+    /// The configuration that controls the behavior of the system metrics monitor.
     public struct Configuration: Sendable {
-        /// Default SystemMetricsMonitor configuration.
+        /// The default system metrics monitor configuration.
         ///
         /// See individual property documentation for specific default values.
         public static let `default`: Self = .init()
 
-        /// Interval between system metrics data scrapping
+        /// The interval between system metrics data scraping.
+        ///
+        /// The default interval is 2 seconds.
         public var interval: Duration
 
         /// String labels associated with the metrics
@@ -29,10 +31,10 @@ extension SystemMetricsMonitor {
         /// Additional dimensions attached to every metric
         package let dimensions: [(String, String)]
 
-        /// Create new instance of ``Configuration``
+        /// Create new monitor configuration.
         ///
         /// - Parameters:
-        ///     - interval: The interval at which system metrics should be updated.
+        ///     - interval: The interval at which system metrics should be updated, defaults to 2 seconds.
         public init(
             pollInterval interval: Duration = .seconds(2)
         ) {
@@ -41,7 +43,7 @@ extension SystemMetricsMonitor {
             self.dimensions = []
         }
 
-        /// Create new instance of ``SystemMetricsMonitor.Configuration``
+        /// Creates a new configuration.
         ///
         /// - Parameters:
         ///     - interval: The interval at which system metrics should be updated.
@@ -60,18 +62,18 @@ extension SystemMetricsMonitor {
 }
 
 extension SystemMetricsMonitor.Configuration {
-    /// Labels for the reported System Metrics Data.
+    /// Labels for the reported system metrics data.
     ///
-    /// Backend implementations are encouraged to provide a static extension with
+    /// Backend implementations can provide a static extension with
     /// defaults that suit their specific backend needs.
     package struct Labels: Sendable {
-        /// Prefix to prefix all other labels with.
+        /// Prefix for all other labels.
         package var prefix: String = "process_"
         /// Label for virtual memory size in bytes.
         package var virtualMemoryBytes: String = "virtual_memory_bytes"
         /// Label for resident memory size in bytes.
         package var residentMemoryBytes: String = "resident_memory_bytes"
-        /// Label for process start time since Unix epoch in seconds.
+        /// Label for process start time since UNIX epoch in seconds.
         package var startTimeSeconds: String = "start_time_seconds"
         /// Label for total user and system CPU time spent in seconds.
         package var cpuSecondsTotal: String = "cpu_seconds_total"
@@ -80,10 +82,10 @@ extension SystemMetricsMonitor.Configuration {
         /// Label for number of open file descriptors.
         package var openFileDescriptors: String = "open_fds"
 
-        /// Construct a label for a metric as a concatenation of prefix and the corresponding label.
+        /// Construct a label for a metric by concatenating the prefix with the corresponding label.
         ///
         /// - Parameters:
-        ///     - for: a property to construct the label for
+        ///     - for: The property to construct the label for.
         package func label(for keyPath: KeyPath<Labels, String>) -> String {
             self.prefix + self[keyPath: keyPath]
         }
@@ -96,10 +98,10 @@ extension SystemMetricsMonitor.Configuration {
         /// Create a new `Labels` instance.
         ///
         /// - Parameters:
-        ///     - prefix: Prefix to prefix all other labels with.
+        ///     - prefix: Prefix for all other labels.
         ///     - virtualMemoryBytes: Label for virtual memory size in bytes
         ///     - residentMemoryBytes: Label for resident memory size in bytes.
-        ///     - startTimeSeconds: Label for process start time since Unix epoch in seconds.
+        ///     - startTimeSeconds: Label for process start time since UNIX epoch in seconds.
         ///     - cpuSecondsTotal: Label for total user and system CPU time spent in seconds.
         ///     - maxFileDescriptors: Label for maximum number of open file descriptors.
         ///     - openFileDescriptors: Label for number of open file descriptors.
