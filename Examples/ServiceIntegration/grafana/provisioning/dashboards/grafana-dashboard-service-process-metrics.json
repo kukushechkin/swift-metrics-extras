@@ -313,7 +313,7 @@
             "uid": "prometheus"
           },
           "editorMode": "builder",
-          "expr": "process_resident_memory_bytes{service_name=\"ServiceIntegrationExample\"}",
+          "expr": "process_resident_memory_bytes",
           "hide": false,
           "instant": false,
           "legendFormat": "Residential Memory",
@@ -326,7 +326,7 @@
             "uid": "prometheus"
           },
           "editorMode": "builder",
-          "expr": "process_virtual_memory_bytes{service_name=\"ServiceIntegrationExample\"}",
+          "expr": "process_virtual_memory_bytes",
           "hide": false,
           "instant": false,
           "legendFormat": "Virtual Memory",
