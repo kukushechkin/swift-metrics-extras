@@ -56,5 +56,6 @@ where [.executable, .test, .regular].contains(
     // https://docs.swift.org/compiler/documentation/diagnostics/nonisolated-nonsending-by-default/
     settings.append(.enableUpcomingFeature("NonisolatedNonsendingByDefault"))
 
+    // Note: do not use .unsafeFlags, this will prevent SPM from checking out the package with tag.
     target.swiftSettings = settings
 }
